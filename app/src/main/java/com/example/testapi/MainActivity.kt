@@ -5,8 +5,6 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import java.io.*
 import java.lang.Exception
-import java.net.HttpURLConnection
-import java.net.MalformedURLException
 import java.net.URL
 import javax.net.ssl.HttpsURLConnection
 
@@ -17,7 +15,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        url = URL("https://dev-api.raddy.me/api/v1/app/onboarding")
+        url = URL("https://testtykhonov.000webhostapp.com/test.json")
 
         Log.e("testLog", "MainActivity onCreate()")
         LoadingThread().start()
@@ -29,8 +27,10 @@ class MainActivity : AppCompatActivity() {
             Log.e("testLog", "LoadingThread run(), url = $url")
             try {
                 val connection = url.openConnection() as HttpsURLConnection
+                connection.requestMethod = "GET"
                 connection.connectTimeout = 5000
                 connection.readTimeout = 10000
+                connection.connect()
                 Log.e("testLog", "responseCode = ${connection.responseCode}")
 
                 val inputStream: InputStream = BufferedInputStream(connection.inputStream)
@@ -38,7 +38,7 @@ class MainActivity : AppCompatActivity() {
                     it.readText()
                 }
 
-                Log.e("testLog", "text = $text")
+                Log.e("testLog", "response = \n $text")
                 inputStream.close()
             } catch (e: Exception) {
                 Log.e("testLog", "error", e)
