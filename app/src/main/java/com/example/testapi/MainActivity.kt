@@ -18,6 +18,8 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         url = URL("https://dev-api.raddy.me/api/v1/app/onboarding")
+
+        Log.e("testLog", "MainActivity onCreate()")
         LoadingThread().start()
     }
 
