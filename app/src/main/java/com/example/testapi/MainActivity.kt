@@ -1,10 +1,14 @@
-@file:Suppress("unused")
-
 package com.example.testapi
 
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.converter.scalars.ScalarsConverterFactory
 import java.io.*
 import java.lang.Exception
 import java.net.URL
@@ -21,11 +25,37 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
-
-        url = URL(url2)
-
         Log.e("testLog", "MainActivity onCreate()")
+
+        test1()
+        //test2()
+    }
+
+    private fun test1() {
+        Log.e("testLog", "MainActivity test1()")
+        val retrofit = Retrofit.Builder()
+            .baseUrl("https://dev-api.raddy.me/api/v1/")
+            .addConverterFactory(ScalarsConverterFactory.create())
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+
+        val service = retrofit.create(GetAppOnboardingService::class.java)
+        service.screens.enqueue(object:Callback<AppOnboardingResponse> {
+            override fun onFailure(call: Call<AppOnboardingResponse>, t: Throwable) {
+                Log.e("testLog", "MainActivity onFailure()", t)
+            }
+
+            override fun onResponse(call: Call<AppOnboardingResponse>,
+                                    response: Response<AppOnboardingResponse>) {
+                Log.e("testLog", "MainActivity onResponse(), code = ${response.code()}")
+                Log.e("testLog", "MainActivity onResponse(), message = ${response.body()?.toString()}")
+            }
+
+        })
+    }
+
+    private fun test2() {
+        url = URL(url2)
         LoadingThread().start()
     }
 
