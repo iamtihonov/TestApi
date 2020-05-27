@@ -8,6 +8,9 @@ import java.lang.Exception
 import java.net.URL
 import javax.net.ssl.HttpsURLConnection
 
+/**
+ * При первом запуске после установки, выдает FileNotFoundException
+ */
 class MainActivity : AppCompatActivity() {
 
     private lateinit var url: URL
