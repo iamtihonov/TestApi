@@ -1,8 +1,10 @@
 package com.example.testapi
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import kotlinx.android.synthetic.main.activity_main.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -31,8 +33,10 @@ class MainActivity : AppCompatActivity() {
         //test2()
     }
 
+    @SuppressLint("SetTextI18n")
     private fun test1() {
         Log.e("testLog", "MainActivity test1()")
+        texStatus.text = "Test1 started"
         val retrofit = Retrofit.Builder()
             .baseUrl("https://dev-api.raddy.me/api/v1/")
             .addConverterFactory(ScalarsConverterFactory.create())
@@ -43,12 +47,14 @@ class MainActivity : AppCompatActivity() {
         service.screens.enqueue(object:Callback<AppOnboardingResponse> {
             override fun onFailure(call: Call<AppOnboardingResponse>, t: Throwable) {
                 Log.e("testLog", "MainActivity onFailure()", t)
+                texStatus.text = "Test1 failure"
             }
 
             override fun onResponse(call: Call<AppOnboardingResponse>,
                                     response: Response<AppOnboardingResponse>) {
                 Log.e("testLog", "MainActivity onResponse(), code = ${response.code()}")
                 Log.e("testLog", "MainActivity onResponse(), message = ${response.body()?.toString()}")
+                texStatus.text = "Test1 success. Code = ${response.code()}"
             }
 
         })
